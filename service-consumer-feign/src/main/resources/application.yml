@@ -1,0 +1,50 @@
+# 应用名称
+spring:
+  application:
+    name: service-consumer
+  main:
+    allow-bean-definition-overriding: true
+# 端口
+server:
+  port: 7073
+# 配置Eureka Server 注册中心
+eureka:
+  instance:
+    prefer-ip-address: true # 是否使用ip 地址注册
+    instance-id: ${spring.cloud.client.ip-address}:${server.port} # ip:port
+  client:
+    register-with-eureka: true         # 是否将自己注册到注册中心，默认为true
+    registry-fetch-interval-seconds: 10 # 表示Eureka Client 间隔多久去服务器拉取注册信息，默认为30 秒
+    service-url:
+      defaultZone: http://root:123456@localhost:8761/eureka/,http://root:123456@localhost:8762/eureka/
+# service-provider 是需要调用的服务名称
+service-provider:
+  ribbon:
+    OkToRetryOnAllOperations: true  # 对所有请求都进行重试
+    MaxAutoRetries: 2               # 对当前实例的重试次数
+    MaxAutoRetriesNextServer: 0     # 切换实例的重试次数
+    ConnectTimeout: 3000            # 请求连接的超时时间
+    ReadTimeout: 3000               # 请求处理的超时时间
+# Feign 开启Hystrix 支持
+feign:
+  hystrix:
+    enabled: true
+  httpclient:
+    enabled: true
+#ribbon的超时时间和Hystrix的超时时间的结合就是Feign的超时时间，一般情况下 都是 ribbon 的超时时间（<）hystrix的超时时间（因为涉及到ribbon的重试机制）
+#hystrix的超时时间
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
+# 度量指标监控与健康检查
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream

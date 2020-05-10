@@ -1,0 +1,22 @@
+# 应用名称(集群下相同)
+spring:
+  application:
+    name: hystrix-turbine
+# 端口
+server:
+  port: 8181
+# 配置Eureka Server 注册中心
+eureka:
+  instance:
+    prefer-ip-address: true # 是否使用ip 地址注册
+    instance-id: ${spring.cloud.client.ip-address}:${server.port} # ip:port
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://root:123456@localhost:8761/eureka/,http://root:123456@localhost:8762/eureka/
+# 聚合监控
+turbine:
+  app-config: service-consumer                # 要监控的服务列表，多个用逗号分隔
+  cluster-name-expression: "'default'"     # 指定集群名称
+
