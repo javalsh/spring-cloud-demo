@@ -1,10 +1,14 @@
 # 应用名称(集群下相同)
 spring:
   application:
-    name: hystrix-turbine
+    name: zuul-server-sentinel
+  cloud:
+    sentinel:
+      filter:
+        enable: false
 # 端口
 server:
-  port: 8181
+  port: 9100
 # 配置Eureka Server 注册中心
 eureka:
   instance:
@@ -15,8 +19,5 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://root:123456@localhost:8761/eureka/,http://root:123456@localhost:8762/eureka/
-# 聚合监控
-turbine:
-  app-config: service-consumer,zuul-server                # 要监控的服务列表，多个用逗号分隔
-  cluster-name-expression: "'default'"     # 指定集群名称
+
 

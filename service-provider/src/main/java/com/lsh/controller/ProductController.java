@@ -22,11 +22,11 @@ public class ProductController {
     @GetMapping("/list")
     public List<Product> selectProductList() {
         System.out.println("……………………product-list…………………………");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         return productService.selectProductList();
     }
 

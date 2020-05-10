@@ -1,0 +1,78 @@
+# 应用名称(集群下相同)
+spring:
+  application:
+    name: zuul-server
+  # redis 缓存
+  redis:
+    timeout: 10000          # 连接超时时间
+    host: 172.17.210.104    # Redis服务器地址
+    port: 6379              # Redis服务器端口
+    database: 0             # 选择哪个库，默认0库
+    lettuce:
+      pool:
+        max-active: 1024    # 最大连接数，默认8
+        max-wait: 10000     # 最大连接阻塞等待时间，单位毫秒，默认-1
+        max-idle: 200       # 最大空闲连接，默认8
+        min-idle: 5         # 最小空闲连接，默认0
+
+# 端口
+server:
+  port: 9000
+# 配置Eureka Server 注册中心
+eureka:
+  instance:
+    prefer-ip-address: true # 是否使用ip 地址注册
+    instance-id: ${spring.cloud.client.ip-address}:${server.port} # ip:port
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://root:123456@localhost:8761/eureka/,http://root:123456@localhost:8762/eureka/z
+zuul:
+  # 服务限流
+  ratelimit:
+    # 开启限流保护
+    enabled: true
+    # 限流数据存储方式
+    repository: redis
+    # default-policy-list 默认配置，全局生效
+    default-policy-list:
+      - limit: 3
+        refresh-interval: 60  # 60s 内请求超过3 次，服务端就抛出异常，60s 后可以恢复正常请求
+        quota: 30             # 请求时间总和不得超过30 秒
+        type:
+          - origin
+          - url
+          - user
+#ribbon的超时时间和Hystrix的超时时间的结合就是Feign的超时时间，一般情况下 都是 ribbon 的超时时间（<）hystrix的超时时间（因为涉及到ribbon的重试机制）
+#hystrix的超时时间
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
+ribbon:
+  OkToRetryOnAllOperations: true  # 对所有请求都进行重试
+  MaxAutoRetries: 2               # 对当前实例的重试次数
+  MaxAutoRetriesNextServer: 1     # 切换实例的重试次数
+  ConnectTimeout: 3000            # 请求连接的超时时间
+  ReadTimeout: 3000               # 请求处理的超时时间
+
+
+
+
+
+  # 禁用Zuul 默认的异常处理filter
+  SendErrorFilter:
+    error:
+      disable: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
+
