@@ -17,9 +17,6 @@
         <module>service-consumer2</module>
         <module>service-consumer-feign</module>
         <module>hystrix-turbine</module>
-        <module>hystrix-turbine</module>
-        <module>hystrix-turbine</module>
-        <module>hystrix-turbine</module>
         <module>zuul-server</module>
         <module>zuul-server-sentinel</module>
     </modules>
