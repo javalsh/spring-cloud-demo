@@ -19,6 +19,8 @@
         <module>hystrix-turbine</module>
         <module>zuul-server</module>
         <module>zuul-server-sentinel</module>
+        <module>gateway-server</module>
+        <module>gateway-server-sentinel</module>
     </modules>
 
     <!-- 继承spring-boot-starter-parent 依赖-->

@@ -25,11 +25,11 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<User> selectUserList() {
-        try {
-            Thread.sleep(6000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(6000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         return Arrays.asList(
                 new User(1,"zhangsan",18),
                 new User(2,"lisi",19),
