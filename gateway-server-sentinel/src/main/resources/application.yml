@@ -1,0 +1,36 @@
+# 应用名称(集群下相同)
+spring:
+  application:
+    name: gateway-server-sentinel
+  cloud:
+    sentinel:
+      filter:
+        enable: false
+    gateway:
+      discovery:
+        locator:
+          # 是否与服务发现组件进行结合，通过serviceId 转发到具体服务实例。
+          enabled: true                # 是否开启基于服务发现的路由规则
+          lower-case-service-id: true  # 是否将服务名称转小写
+      #路有规则
+      routes:
+        - id: service-provider         # 路由ID，唯一
+          uri: http://localhost:6061/  # 目标URI，路由到微服务的地址
+          predicates:
+            - Path=/product/**
+
+# 端口
+server:
+  port: 9300
+# 配置Eureka Server 注册中心
+eureka:
+  instance:
+    prefer-ip-address: true # 是否使用ip 地址注册
+    instance-id: ${spring.cloud.client.ip-address}:${server.port} # ip:port
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://root:123456@localhost:8761/eureka/,http://root:123456@localhost:8762/eureka/
+
+
